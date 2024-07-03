@@ -1,24 +1,33 @@
-import logo from './logo.svg';
 import './App.css';
+import { ImageList, ImageListItem } from '@mui/material';
+import { useGetRandomDogQuery } from './services/dogs';
 
 function App() {
+
+  const { data, error, isLoading } = useGetRandomDogQuery()
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+      <main style={{ maxWidth: '100vw' }}>
+
+        <ImageList variant="masonry" cols={3} gap={8}>
+          {error ? (
+            <>Oh no, there was an error</>
+          ) : isLoading ? (
+            <>Loading...</>
+          ) : data ? (
+            <ImageListItem key={data.fileSizeBytes}>
+              <img
+                srcSet={`${data.url}?w=248&fit=crop&auto=format&dpr=2 2x`}
+                src={`${data.url}?w=248&fit=crop&auto=format`}
+                alt={''}
+                loading="lazy"
+                className='img-rounded'
+              />
+            </ImageListItem>
+          ) : null}
+        </ImageList>
+      </main>
+    </div >
   );
 }
 
